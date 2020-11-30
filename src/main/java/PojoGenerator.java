@@ -18,11 +18,12 @@ public class PojoGenerator {
         BigDecimal min = configuration.getBigDecimal("req.amt.min");
         Long timeDiv = configuration.getLong("time.div");
         String pinPath = configuration.getString("dic.client.pin");
+        String merchantPath = configuration.getString("dic.merchant");
 
         Pojo pojo = new Pojo();
         pojo.clientPin = new RandomDicString(pinPath).getSting();
         pojo.reqAmt = new RandomDecimal(max, min).getDecimal();
-        pojo.merchant = configuration.getString("merchant");
+        pojo.merchant = new RandomDicString(merchantPath).getSting();
         pojo.uTime = new CurDate(timeDiv).getDate();
         return pojo;
     }
