@@ -12,14 +12,15 @@ public class PojoGenerator {
         return new PropertiesConfiguration(filename);
     }
 
-    public void setPojo(Pojo pojo) throws ConfigurationException {
+    public Pojo getPojo() throws ConfigurationException {
         Configuration configuration = getConfig();
-
+        Pojo pojo = new Pojo();
         pojo.clientPin = configuration.getString("client.pin");
         BigDecimal max = configuration.getBigDecimal("req.amt.max");
         BigDecimal min = configuration.getBigDecimal("req.amt.min");
         pojo.reqAmt = max.subtract(min).multiply(BigDecimal.valueOf(Math.random())).add(min);
         pojo.merchant = configuration.getString("merchant");
         pojo.uTime = new Date(System.currentTimeMillis() + configuration.getLong("time.div"));
+        return pojo;
     }
 }
