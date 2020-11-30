@@ -9,7 +9,7 @@ public class RandomDecimal {
         this.min = min;
     }
 
-    public BigDecimal getDouble() {
+    public BigDecimal getDecimal() {
         return max.subtract(min).multiply(BigDecimal.valueOf(Math.random())).add(min);
     }
 }
