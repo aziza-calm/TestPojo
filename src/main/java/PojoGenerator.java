@@ -13,11 +13,15 @@ public class PojoGenerator {
 
     public Pojo getPojo() throws ConfigurationException {
         Configuration configuration = getConfig();
+        BigDecimal max = configuration.getBigDecimal("req.amt.max");
+        BigDecimal min = configuration.getBigDecimal("req.amt.min");
+        Long timeDiv = configuration.getLong("time.div");
+
         Pojo pojo = new Pojo();
         pojo.clientPin = configuration.getString("client.pin");
-        pojo.reqAmt = new RandomDecimal(BigDecimal.valueOf(9999), BigDecimal.valueOf(123)).getDecimal();
+        pojo.reqAmt = new RandomDecimal(max, min).getDecimal();
         pojo.merchant = configuration.getString("merchant");
-        pojo.uTime = new CurDate(120000L).getDate();
+        pojo.uTime = new CurDate(timeDiv).getDate();
         return pojo;
     }
 }
