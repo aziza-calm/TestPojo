@@ -16,9 +16,7 @@ public class PojoGenerator {
         Configuration configuration = getConfig();
         Pojo pojo = new Pojo();
         pojo.clientPin = configuration.getString("client.pin");
-        BigDecimal max = configuration.getBigDecimal("req.amt.max");
-        BigDecimal min = configuration.getBigDecimal("req.amt.min");
-        pojo.reqAmt = max.subtract(min).multiply(BigDecimal.valueOf(Math.random())).add(min);
+        pojo.reqAmt = new RandomDecimal(BigDecimal.valueOf(9999), BigDecimal.valueOf(123)).getDouble();
         pojo.merchant = configuration.getString("merchant");
         pojo.uTime = new Date(System.currentTimeMillis() + configuration.getLong("time.div"));
         return pojo;
