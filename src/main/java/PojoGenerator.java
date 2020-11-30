@@ -2,6 +2,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class PojoGenerator {
@@ -11,14 +12,15 @@ public class PojoGenerator {
         return new PropertiesConfiguration(filename);
     }
 
-    public Pojo getPojo() throws ConfigurationException {
+    public Pojo getPojo() throws ConfigurationException, IOException {
         Configuration configuration = getConfig();
         BigDecimal max = configuration.getBigDecimal("req.amt.max");
         BigDecimal min = configuration.getBigDecimal("req.amt.min");
         Long timeDiv = configuration.getLong("time.div");
+        String pinPath = configuration.getString("dic.client.pin");
 
         Pojo pojo = new Pojo();
-        pojo.clientPin = configuration.getString("client.pin");
+        pojo.clientPin = new RandomDicString(pinPath).getSting();
         pojo.reqAmt = new RandomDecimal(max, min).getDecimal();
         pojo.merchant = configuration.getString("merchant");
         pojo.uTime = new CurDate(timeDiv).getDate();
