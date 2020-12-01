@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 public class PojoGenerator {
-    private static PropertiesConfiguration getConfig() throws ConfigurationException {
-        String filename = System.getProperty("app_config");
+    RandomDecimal randomDecimal;
+    RandomDicString randomClientPin;
+    RandomDicString randomMerchant;
+    CurDate curDate;
 
-        return new PropertiesConfiguration(filename);
-    }
-
-    public Pojo getPojo() throws ConfigurationException, IOException {
+    public PojoGenerator() throws ConfigurationException {
         Configuration configuration = getConfig();
         BigDecimal max = configuration.getBigDecimal("req.amt.max");
         BigDecimal min = configuration.getBigDecimal("req.amt.min");
@@ -22,11 +21,24 @@ public class PojoGenerator {
         String pinPath = configuration.getString("dic.client.pin");
         String merchantPath = configuration.getString("dic.merchant");
 
+        this.randomDecimal = new RandomDecimal(max, min);
+        this.randomClientPin = new RandomDicString(pinPath);
+        this.randomMerchant = new RandomDicString(merchantPath);
+        this.curDate = new CurDate(timeDiv);
+    }
+
+    private static PropertiesConfiguration getConfig() throws ConfigurationException {
+        String filename = System.getProperty("app_config");
+
+        return new PropertiesConfiguration(filename);
+    }
+
+    public Pojo getPojo() throws IOException {
         Pojo pojo = new Pojo();
-        pojo.clientPin = new RandomDicString(pinPath).getSting();
-        pojo.reqAmt = new RandomDecimal(max, min).getDecimal();
-        pojo.merchant = new RandomDicString(merchantPath).getSting();
-        pojo.uTime = new CurDate(timeDiv).getDate();
+        pojo.clientPin = randomClientPin.getSting();
+        pojo.reqAmt = randomDecimal.getDecimal();
+        pojo.merchant = randomMerchant.getSting();
+        pojo.uTime = curDate.getDate();
         return pojo;
     }
 }
