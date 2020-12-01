@@ -1,13 +1,15 @@
+package generator;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringJoiner;
 
 public class Pojo {
-    String clientPin;
-    BigDecimal reqAmt;
-    String merchant;
-    Date uTime;
+    public String clientPin;
+    public BigDecimal reqAmt;
+    public String merchant;
+    public Date uTime;
 
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");

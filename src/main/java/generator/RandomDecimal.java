@@ -1,3 +1,5 @@
+package generator;
+
 import java.math.BigDecimal;
 
 public class RandomDecimal {

@@ -8,7 +8,7 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 
 import java.util.Properties;
 
-public class Streaming {
+public class StreamingHelloWorld {
     public static void main(String[] args) {
         Properties config = new Properties();
 

@@ -1,5 +1,6 @@
-import org.apache.commons.configuration.ConfigurationException;
+package generator;
 
+import org.apache.commons.configuration.ConfigurationException;
 import java.io.IOException;
 
 public class Main {
