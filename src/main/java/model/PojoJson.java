@@ -1,25 +1,36 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import generator.Pojo;
+import serdes.MultiDateDeserializer;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class PojoJson {
-    @JsonProperty("CLIENT_PIN")
+    @JsonProperty("clientPin")
     private String clientPin;
 
-    @JsonProperty("REQ_AMT")
+    @JsonProperty("reqAmt")
     private BigDecimal reqAmt;
 
-    @JsonProperty("MERCHANT")
+    @JsonProperty("merchant")
     private String merchant;
 
-    @JsonProperty("UTIME")
+    @JsonProperty("uTime")
+    @JsonFormat
+            (shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    @JsonDeserialize(using = MultiDateDeserializer.class)
     private Date uTime;
 
-    public PojoJson(String clientPin, BigDecimal reqAmt, String merchant, Date uTime) {
+    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    public PojoJson(@JsonProperty("clientPin")String clientPin,
+                    @JsonProperty("reqAmt")BigDecimal reqAmt,
+                    @JsonProperty("merchant")String merchant,
+                    @JsonProperty("uTime")Date uTime) {
         this.clientPin = clientPin;
         this.reqAmt = reqAmt;
         this.merchant = merchant;

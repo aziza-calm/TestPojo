@@ -7,3 +7,6 @@ vbn
 uio
 jkl
 mpl
+Cafe&Restaurant
+Supermarket
+E-Commerce

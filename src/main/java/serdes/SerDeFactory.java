@@ -4,6 +4,7 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.Serializer;
+import org.apache.kafka.streams.errors.LogAndContinueExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class SerDeFactory {
 
         final Deserializer<T> deserializer = new JsonPOJODeserializer<>();
         serdeProps.put("JsonPOJOClass", T);
+        serdeProps.put("default.deserialization.exception.handler", LogAndContinueExceptionHandler.class);
         deserializer.configure(serdeProps, false);
 
         return Serdes.serdeFrom(serializer, deserializer);

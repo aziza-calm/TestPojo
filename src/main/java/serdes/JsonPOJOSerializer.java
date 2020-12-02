@@ -1,14 +1,15 @@
 package serdes;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.gson.Gson;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class JsonPOJOSerializer<T> implements Serializer<T> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private Gson gson = new Gson();
 
     /**
      * Default constructor needed by Kafka
@@ -18,16 +19,15 @@ public class JsonPOJOSerializer<T> implements Serializer<T> {
 
     @Override
     public void configure(Map<String, ?> props, boolean isKey) {
-        objectMapper.registerModule(new JavaTimeModule());
     }
 
     @Override
-    public byte[] serialize(String topic, T data) {
-        if (data == null)
+    public byte[] serialize(String topic, T t) {
+        if (t == null)
             return null;
 
         try {
-            return objectMapper.writeValueAsBytes(data);
+            return gson.toJson(t).getBytes(StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new SerializationException("Error serializing JSON message", e);
         }

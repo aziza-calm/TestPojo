@@ -13,11 +13,11 @@ public class Pojo {
 
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return new StringJoiner(", ",Pojo.class.getSimpleName() + "[", "]")
-                .add("clientPin='" + clientPin + "'")
-                .add("reqAmt='" + reqAmt + "'")
-                .add("merchant='" + merchant + "'")
-                .add("uTime='" + formatter.format(uTime) + "'")
+        return new StringJoiner(", ","{", "}")
+                .add("\"clientPin\":\"" + clientPin + '"')
+                .add("\"reqAmt\":\"" + reqAmt + "\"")
+                .add("\"merchant\":\"" + merchant + "\"")
+                .add("\"uTime\":\"" + formatter.format(uTime) + "\"")
                 .toString();
     }
 }

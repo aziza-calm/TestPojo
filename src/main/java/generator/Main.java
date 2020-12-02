@@ -10,5 +10,9 @@ public class Main {
         System.out.println(generator.getPojo().toString());
         System.out.println(generator.getPojo().toString());
         System.out.println(generator.getPojo().toString());
+        System.out.println(generator.getPojo().toString());
+        System.out.println(generator.getPojo().toString());
+        System.out.println(generator.getPojo().toString());
+        System.out.println(generator.getPojo().toString());
     }
 }
