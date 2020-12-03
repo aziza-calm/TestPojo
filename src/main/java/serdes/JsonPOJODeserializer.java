@@ -11,14 +11,14 @@ import java.util.Map;
 
 public class JsonPOJODeserializer<T> implements Deserializer<T> {
     private final ObjectMapper objectMapper = new ObjectMapper();
-
+    private Gson gson;
     private Class<T> tClass;
 
     /**
      * Default constructor needed by Kafka
      */
     public JsonPOJODeserializer() {
-        objectMapper.registerModule(new JavaTimeModule());
+
     }
 
     @SuppressWarnings("unchecked")

@@ -1,16 +1,16 @@
+import joiner.CouponJoiner;
+import model.Coupon;
 import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Predicate;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import serdes.SerDeFactory;
 
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class StreamingProblemFive {
     public static void main(String[] args) {
@@ -39,9 +39,22 @@ public class StreamingProblemFive {
         int ecommerce = 2;
 
         KStream<String, PojoJson>[] filtByMerch =
-                filteredSource.branch(isCafeRestr, isSupermarket, isECommerce);
+                filteredSource.selectKey((k, v) -> v.getClientPin())
+                        .branch(isCafeRestr, isSupermarket, isECommerce);
 
-        filtByMerch[ecommerce].to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
+        ValueJoiner<PojoJson, PojoJson, Coupon> couponJoiner = new CouponJoiner();
+        JoinWindows fourtyfiveMinuteWindow =  JoinWindows.of(60 * 1000 * 45);
+        KStream<String, Coupon> coupons = filtByMerch[caferestr].join(filtByMerch[supermarket],
+                couponJoiner, /* ValueJoiner */
+                fourtyfiveMinuteWindow,
+                Joined.with(
+                        Serdes.String(), /* key */
+                        SerDeFactory.getPOJOSerde(PojoJson.class),   /* left value */
+                        SerDeFactory.getPOJOSerde(PojoJson.class))  /* right value */
+        );
+        coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
+//
+//        filtByMerch[ecommerce].to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();

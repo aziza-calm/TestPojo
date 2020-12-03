@@ -9,15 +9,14 @@ public class Pojo {
     public String clientPin;
     public BigDecimal reqAmt;
     public String merchant;
-    public Date uTime;
+    public String uTime;
 
     public String toString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return new StringJoiner(", ","{", "}")
                 .add("\"clientPin\":\"" + clientPin + '"')
                 .add("\"reqAmt\":\"" + reqAmt + "\"")
                 .add("\"merchant\":\"" + merchant + "\"")
-                .add("\"uTime\":\"" + formatter.format(uTime) + "\"")
+                .add("\"uTime\":\"" + uTime + "\"")
                 .toString();
     }
 }

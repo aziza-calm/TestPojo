@@ -20,6 +20,7 @@ public class MultiDateDeserializer extends StdDeserializer<LocalDateTime> {
             "yyyy-MM-dd'T'HH:mm:ss.SSS",
             "yyyy-MM-dd'T'HH:mm:ss",
             "yyyy-MM-dd'T'HH:mm",
+            "EEE MMM dd HH:mm:ss Z yyyy",
     };
 
     public MultiDateDeserializer() {

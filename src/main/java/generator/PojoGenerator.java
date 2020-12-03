@@ -38,7 +38,7 @@ public class PojoGenerator {
         pojo.clientPin = randomClientPin.getSting();
         pojo.reqAmt = randomDecimal.getDecimal();
         pojo.merchant = randomMerchant.getSting();
-        pojo.uTime = curDate.getDate();
+//        pojo.uTime = curDate.getDate();
         return pojo;
     }
 }
