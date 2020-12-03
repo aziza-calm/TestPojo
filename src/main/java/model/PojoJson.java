@@ -37,6 +37,7 @@ public class PojoJson {
         this.uTime = uTime;
     }
 
+    @JsonCreator
     public PojoJson(Pojo pojo) {
         this.clientPin = pojo.clientPin;
         this.reqAmt = pojo.reqAmt;
