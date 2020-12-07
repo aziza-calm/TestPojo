@@ -1,3 +1,4 @@
+import generator.Pojo;
 import joiner.CouponJoiner;
 import model.Analytics;
 import model.Coupon;
@@ -11,9 +12,7 @@ import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.WindowStore;
 import serdes.SerDeFactory;
 
-import java.time.Duration;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 public class StreamingProblemFive {
     public static void main(String[] args) {
@@ -57,15 +56,18 @@ public class StreamingProblemFive {
         );
         coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
 
-        Analytics analytics = new Analytics(null);
+        Analytics<PojoJson> analytics = new Analytics<>();
         filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
-                .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
+//                .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
                 .aggregate(() -> analytics,
-                        (key, value, agvalue) -> analytics.getAvReqAmt(key, value.getReqAmt()),
-                        Materialized.<String, PojoJson,
-                                WindowStore<String, PojoJson>>as("SumPerClient")
+                        (key, value, agvalue) -> agvalue.add(value),
+                        Materialized.<String, Analytics<PojoJson>,
+                                WindowStore<String, Analytics<PojoJson>>>as("SumPerClient")
                                 .withKeySerde(Serdes.String())
-                                .withValueSerde(SerDeFactory.getPOJOSerde(Analytics.class)));
+                                .withValueSerde(SerDeFactory.getPOJOSerde(Analytics.class))
+                )
+                .toStream()
+                .to("analytics", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Analytics.class)));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
