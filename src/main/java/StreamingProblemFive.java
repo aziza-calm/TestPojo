@@ -1,4 +1,5 @@
 import joiner.CouponJoiner;
+import model.Analytics;
 import model.Coupon;
 import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -7,8 +8,10 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.WindowStore;
 import serdes.SerDeFactory;
 
+import java.time.Duration;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -53,8 +56,16 @@ public class StreamingProblemFive {
                         SerDeFactory.getPOJOSerde(PojoJson.class))  /* right value */
         );
         coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
-//
-//        filtByMerch[ecommerce].to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
+
+        Analytics analytics = new Analytics(null);
+        filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
+                .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
+                .aggregate(() -> analytics,
+                        (key, value, agvalue) -> analytics.getAvReqAmt(key, value.getReqAmt()),
+                        Materialized.<String, PojoJson,
+                                WindowStore<String, PojoJson>>as("SumPerClient")
+                                .withKeySerde(Serdes.String())
+                                .withValueSerde(SerDeFactory.getPOJOSerde(Analytics.class)));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
