@@ -51,7 +51,7 @@ public class StreamingProblemFive {
         ValueJoiner<PojoJson, PojoJson, Coupon> couponJoiner = new CouponJoiner();
         JoinWindows fourtyfiveMinuteWindow =  JoinWindows.of(Duration.ofMinutes(45));
         KStream<String, Coupon> coupons = filtByMerch[caferestr].join(filtByMerch[supermarket],
-                couponJoiner, /* ValueJoiner */
+                new CouponJoiner(), /* ValueJoiner */
                 fourtyfiveMinuteWindow,
                 Joined.with(
                         Serdes.String(), /* key */

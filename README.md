@@ -1,42 +1,24 @@
 # TestPojo
 
-{"clientPin":"dfghjk", "reqAmt":"6339.9821337959555072", "merchant":"E-Commerce", "uTime":"2020-12-02T14:48:23.000"}
-
-{"clientPin":"dfghjk", "reqAmt":"6339.9821337959555072", "merchant":"E-Commerce", "uTime":"2020-12-02T14:48:23.000"}
 
 # Testing coupons branch
 ### Sent to source-topic:
-{"clientPin":"xcvbnm", "reqAmt":"1339.9821337959555072", "merchant":"Cafe&Restaurant", "uTime":"2020-12-02T14:48:23.000"}
 
-{"clientPin":"abcdef", "reqAmt":"1339.9821337959555072", "merchant":"Supermarket", "uTime":"2020-12-02T14:48:23.000"}
+{"clientPin":"bcdefg", "reqAmt":"10.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
 
-{"clientPin":"abcdef", "reqAmt":"1339.9821337959555072", "merchant":"Cafe&Restaurant", "uTime":"2020-12-02T14:48:23.000"}
+{"clientPin":"bcdefg", "reqAmt":"20.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
 
-{"clientPin":"abcdef", "reqAmt":"1339.9821337959555072", "merchant":"Supermarket", "uTime":"2020-12-02T14:48:23.000"}
+{"clientPin":"bcdefg", "reqAmt":"5.0", "merchant":"Supermarket", "uTime":"2020-12-08T14:48:23.000"}
 
-{"clientPin":"abcdef", "reqAmt":"1339.9821337959555072", "merchant":"Supermarket", "uTime":"2020-12-02T14:48:23.000"}
+{"clientPin":"bcdefg", "reqAmt":"7.0", "merchant":"Supermarket", "uTime":"2020-12-08T14:48:23.000"}
 
-{"clientPin":"abcdef", "reqAmt":"339.9821337959555072", "merchant":"Cafe&Restaurant", "uTime":"2020-12-02T14:48:23.000"}
-
-{"clientPin":"abcdef", "reqAmt":"39.9821337959555072", "merchant":"Supermarket", "uTime":"2020-12-02T14:48:23.000"}
-
-{"clientPin":"abcdef", "reqAmt":"1.9821337959555072", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
+{"clientPin":"bcdefg", "reqAmt":"30.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
 
 ### Received in coupons:
-{"clientPin":"abcdef","reqAmt":2679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
 
-{"clientPin":"abcdef","reqAmt":2679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-
-{"clientPin":"abcdef","reqAmt":2679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-
-{"clientPin":"abcdef","reqAmt":1679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":1679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":1679.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-
-{"clientPin":"abcdef","reqAmt":1379.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":379.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-
-{"clientPin":"abcdef","reqAmt":1341.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":1341.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":1341.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
-{"clientPin":"abcdef","reqAmt":41.9642675919110144,"merchant":"Cafe\u0026RestaurantSupermarket"}
+{"clientPin":"bcdefg","reqAmt":15.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}
+{"clientPin":"bcdefg","reqAmt":25.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}
+{"clientPin":"bcdefg","reqAmt":17.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}
+{"clientPin":"bcdefg","reqAmt":27.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}
+{"clientPin":"bcdefg","reqAmt":35.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}
+{"clientPin":"bcdefg","reqAmt":37.0,"merchant":"Cafe\u0026Restaurant + Supermarket"}

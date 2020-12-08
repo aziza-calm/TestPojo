@@ -16,7 +16,7 @@ public class Coupon {
 
     public Coupon(PojoJson pojoJson, PojoJson pojoJson2) {
         this.clientPin = pojoJson.getClientPin();
-        this.merchant = pojoJson.getMerchant() + pojoJson2.getMerchant();
+        this.merchant = pojoJson.getMerchant() + " + " + pojoJson2.getMerchant();
         this.reqAmt = pojoJson.getReqAmt().add(pojoJson2.getReqAmt());
     }
 }
