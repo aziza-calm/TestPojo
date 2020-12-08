@@ -1,4 +1,3 @@
-import generator.Pojo;
 import joiner.CouponJoiner;
 import model.Analytics;
 import model.Coupon;
@@ -6,12 +5,13 @@ import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
-import org.apache.kafka.streams.state.WindowStore;
 import serdes.SerDeFactory;
 
+import java.time.Duration;
 import java.util.Properties;
 
 public class StreamingProblemFive {
@@ -57,16 +57,16 @@ public class StreamingProblemFive {
         coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
 
         Analytics<PojoJson> analytics = new Analytics<>();
-        filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
-//                .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
+        KGroupedStream<String, PojoJson> kGroupedStreams = filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
+        KTable<Windowed<String>, Analytics<PojoJson>> aggreg = kGroupedStreams
+                .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
                 .aggregate(() -> analytics,
-                        (key, value, agvalue) -> agvalue.add(value),
-                        Materialized.<String, Analytics<PojoJson>,
-                                WindowStore<String, Analytics<PojoJson>>>as("SumPerClient")
-                                .withKeySerde(Serdes.String())
-                                .withValueSerde(SerDeFactory.getPOJOSerde(Analytics.class))
-                )
-                .toStream()
+                        (key, value, agvalue) -> agvalue.recountAv(value),
+                        Materialized
+                                .with(Serdes.String(), SerDeFactory.getPOJOSerde(Analytics.class))
+                );
+        aggreg.toStream()
+                .map((k, v) -> KeyValue.pair("xxxxxx", v))
                 .to("analytics", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Analytics.class)));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
