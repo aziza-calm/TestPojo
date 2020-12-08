@@ -25,8 +25,10 @@ public class StreamingProblemFive {
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, PojoJson> source = builder.stream("source-topic", Consumed.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
 
+        // сначала фильтруем
         KStream<String, PojoJson> filteredSource = source.filter((key, pojo) -> pojo.getReqAmt().doubleValue() <= 5000);
 
+//        готовим разделение на ветки
         Predicate<String, PojoJson> isCafeRestr =
                 (key, pojo) ->
                 pojo.getMerchant().equals("Cafe&Restaurant");
@@ -40,12 +42,14 @@ public class StreamingProblemFive {
         int supermarket = 1;
         int ecommerce = 2;
 
+//        делим на ветки, предварительно задав ключ
         KStream<String, PojoJson>[] filtByMerch =
                 filteredSource.selectKey((k, v) -> v.getClientPin())
                         .branch(isCafeRestr, isSupermarket, isECommerce);
 
+//        джоиним потоки с Кафе\ресторанами и супермаркетами с окном 45 минут
         ValueJoiner<PojoJson, PojoJson, Coupon> couponJoiner = new CouponJoiner();
-        JoinWindows fourtyfiveMinuteWindow =  JoinWindows.of(60 * 1000 * 45);
+        JoinWindows fourtyfiveMinuteWindow =  JoinWindows.of(Duration.ofMinutes(45));
         KStream<String, Coupon> coupons = filtByMerch[caferestr].join(filtByMerch[supermarket],
                 couponJoiner, /* ValueJoiner */
                 fourtyfiveMinuteWindow,
@@ -54,8 +58,11 @@ public class StreamingProblemFive {
                         SerDeFactory.getPOJOSerde(PojoJson.class),   /* left value */
                         SerDeFactory.getPOJOSerde(PojoJson.class))  /* right value */
         );
+//        и отправляем в топик coupons
         coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
 
+//        третья ветка ecommerce: считаем среднюю сумму покупок в окне 20 мин, обновляя каждую минуту.
+//        Маскируем ключ, там хранится clientPin
         Analytics<PojoJson> analytics = new Analytics<>();
         filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
                 .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
