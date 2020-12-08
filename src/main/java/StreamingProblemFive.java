@@ -57,15 +57,14 @@ public class StreamingProblemFive {
         coupons.to("coupons", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Coupon.class)));
 
         Analytics<PojoJson> analytics = new Analytics<>();
-        KGroupedStream<String, PojoJson> kGroupedStreams = filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)));
-        KTable<Windowed<String>, Analytics<PojoJson>> aggreg = kGroupedStreams
+        filtByMerch[ecommerce].groupByKey(Grouped.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
                 .windowedBy(TimeWindows.of(Duration.ofMinutes(20)).grace(Duration.ofMinutes(1)))
                 .aggregate(() -> analytics,
                         (key, value, agvalue) -> agvalue.recountAv(value),
                         Materialized
                                 .with(Serdes.String(), SerDeFactory.getPOJOSerde(Analytics.class))
-                );
-        aggreg.toStream()
+                )
+                .toStream()
                 .map((k, v) -> KeyValue.pair("xxxxxx", v))
                 .to("analytics", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(Analytics.class)));
 
