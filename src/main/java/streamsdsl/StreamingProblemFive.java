@@ -1,3 +1,5 @@
+package streamsdsl;
+
 import joiner.CouponJoiner;
 import model.Analytics;
 import model.Coupon;
