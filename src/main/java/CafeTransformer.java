@@ -7,7 +7,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.time.Duration;
 
-public class CafeTransformer implements ValueTransformer {
+public class CafeTransformer implements ValueTransformer<PojoJson, AkciyaStep> {
     private KeyValueStore<String, AkciyaStep> state;
 
     @Override
@@ -17,7 +17,7 @@ public class CafeTransformer implements ValueTransformer {
     }
 
     @Override
-    public Object transform(PojoJson pojoJson) {
+    public AkciyaStep transform(PojoJson pojoJson) {
         AkciyaStep akciyaStep = new AkciyaStep(pojoJson);
         this.state.putIfAbsent(akciyaStep.getClientPin(), akciyaStep);
         this.state.get(akciyaStep.getClientPin()).setAntRur(pojoJson);
