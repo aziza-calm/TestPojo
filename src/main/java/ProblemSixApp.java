@@ -1,20 +1,17 @@
-import generator.Pojo;
+import model.AkciyaStep;
 import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Predicate;
-import org.apache.kafka.streams.processor.UsePreviousTimeOnInvalidTimestamp;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
-import serdes.JsonPOJODeserializer;
-import serdes.JsonPOJOSerializer;
 import serdes.SerDeFactory;
 
 import java.util.Properties;
@@ -53,14 +50,15 @@ public class ProblemSixApp {
                         .branch(isCafeRestr, isSupermarket, isECommerce);
 
         // create store
-        StoreBuilder<KeyValueStore<String,String>> keyValueStoreBuilder =
-                Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore("myValueTransformState"),
+        StoreBuilder<KeyValueStore<String,AkciyaStep>> keyValueStoreBuilder =
+                Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore("akciya-steps"),
                         Serdes.String(),
-                        Serdes.String());
+                        SerDeFactory.getPOJOSerde(AkciyaStep.class));
         // register store
         builder.addStateStore(keyValueStoreBuilder);
 
-        filtByMerch[caferestr].transform(CafeTransformer::new);
+        filtByMerch[caferestr].transformValues(new CafeTransformerSupplier(), "akciya-steps")
+                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), config);
         kafkaStreams.cleanUp();
