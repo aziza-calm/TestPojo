@@ -1,5 +1,6 @@
 import model.AkciyaStep;
 import model.PojoJson;
+import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.kstream.ValueTransformer;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.PunctuationType;
@@ -7,7 +8,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.time.Duration;
 
-public class CafeTransformer implements ValueTransformer<PojoJson, AkciyaStep> {
+public class CafeTransformer implements Transformer<String, PojoJson, AkciyaStep> {
     private KeyValueStore<String, AkciyaStep> state;
 
     @Override
@@ -17,10 +18,14 @@ public class CafeTransformer implements ValueTransformer<PojoJson, AkciyaStep> {
     }
 
     @Override
-    public AkciyaStep transform(PojoJson pojoJson) {
-        AkciyaStep akciyaStep = new AkciyaStep(pojoJson);
-        this.state.putIfAbsent(akciyaStep.getClientPin(), akciyaStep);
-        this.state.get(akciyaStep.getClientPin()).setAntRur(pojoJson);
+    public AkciyaStep transform(String key, PojoJson pojoJson) {
+        Object check = state.putIfAbsent(key, new AkciyaStep(pojoJson));
+        if (check != null) {
+            AkciyaStep akciyaStep = state.get(key);
+            akciyaStep.updateAntRur(pojoJson.getReqAmt());
+            System.out.println("Updated!");
+            state.put(key, akciyaStep);
+        }
         return null;
     }
 

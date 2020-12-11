@@ -2,6 +2,7 @@ import model.AkciyaStep;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.Punctuator;
+import org.apache.kafka.streams.processor.To;
 import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.KeyValueStore;
 
@@ -27,7 +28,11 @@ public class CafePunctuator implements Punctuator {
 
             if (akciyaStep != null) {
                 if (akciyaStep.getAntRur().compareTo(BigDecimal.valueOf(3000)) >= 0) {
+                    akciyaStep.setStepId(1);
                     context.forward(key, akciyaStep);
+                    System.out.printf("Forwarded {} {}", key, akciyaStep.toString());
+                    store.delete(key);
+                    System.out.printf("Deleted {}", key);
                 }
             }
         }

@@ -1,9 +1,11 @@
-import org.apache.kafka.streams.kstream.ValueTransformer;
-import org.apache.kafka.streams.kstream.ValueTransformerSupplier;
+import model.AkciyaStep;
+import model.PojoJson;
+import org.apache.kafka.streams.kstream.Transformer;
+import org.apache.kafka.streams.kstream.TransformerSupplier;
 
-public class CafeTransformerSupplier implements ValueTransformerSupplier {
+public class CafeTransformerSupplier implements TransformerSupplier {
     @Override
-    public ValueTransformer get() {
+    public Transformer get() {
         return new CafeTransformer();
     }
 }

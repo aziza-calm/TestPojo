@@ -5,10 +5,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Predicate;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
@@ -57,7 +54,7 @@ public class ProblemSixApp {
         // register store
         builder.addStateStore(keyValueStoreBuilder);
 
-        filtByMerch[caferestr].transformValues(new CafeTransformerSupplier(), "akciya-steps")
+        filtByMerch[caferestr].transform(new CafeTransformerSupplier(), "akciya-steps")
                                 .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), config);
