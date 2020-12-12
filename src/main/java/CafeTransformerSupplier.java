@@ -1,5 +1,3 @@
-import model.AkciyaStep;
-import model.PojoJson;
 import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.kstream.TransformerSupplier;
 

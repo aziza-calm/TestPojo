@@ -19,7 +19,7 @@ public class AkciyaStep {
     private String eventDttm;
 
     @JsonProperty("antRur")
-    private BigDecimal antRur = BigDecimal.ZERO;
+    private BigDecimal antRur;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public AkciyaStep(@JsonProperty("clientPin") String clientPin,
@@ -36,7 +36,7 @@ public class AkciyaStep {
         this.clientPin = pojoJson.getClientPin();
         this.stepId = 0;
         this.eventDttm = new Date(System.currentTimeMillis()).toString();
-        this.antRur = this.antRur.add(pojoJson.getReqAmt());
+        this.antRur = pojoJson.getReqAmt();
     }
 
     public String getClientPin() {
