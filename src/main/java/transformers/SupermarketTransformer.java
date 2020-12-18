@@ -1,3 +1,5 @@
+package transformers;
+
 import model.AkciyaStep;
 import model.PojoJson;
 import org.apache.kafka.streams.KeyValue;
@@ -5,7 +7,7 @@ import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 
-public class EcommerceTransformer implements Transformer<String, PojoJson, KeyValue<String, AkciyaStep>> {
+public class SupermarketTransformer implements Transformer<String, PojoJson, KeyValue<String, AkciyaStep>> {
     private KeyValueStore<String, AkciyaStep> state;
 
     @Override
@@ -17,11 +19,11 @@ public class EcommerceTransformer implements Transformer<String, PojoJson, KeyVa
     public KeyValue transform(String key, PojoJson pojoJson) {
         AkciyaStep akciyaStep = state.get(key);
         if (akciyaStep != null) {
-            if (akciyaStep.getStepId() == 1 && akciyaStep.getMerchant().equals("Cafe&Restaurant")) {
-                akciyaStep.setMerchant("E-Commerce");
+            if (akciyaStep.getStepId() == 2 && akciyaStep.getMerchant().equals("E-Commerce")) {
+                akciyaStep.setMerchant("Supermarket");
                 akciyaStep.setAntRur(pojoJson.getReqAmt());
             }
-            else if (akciyaStep.getStepId() == 1 && akciyaStep.getMerchant().equals("E-Commerce"))
+            else if (akciyaStep.getStepId() == 2 && akciyaStep.getMerchant().equals("Supermarket"))
                 akciyaStep.updateAntRur(pojoJson.getReqAmt());
             akciyaStep = CheckState.checkState(key, akciyaStep, state);
         }

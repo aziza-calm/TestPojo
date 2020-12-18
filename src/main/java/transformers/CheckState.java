@@ -1,3 +1,5 @@
+package transformers;
+
 import model.AkciyaStep;
 import org.apache.kafka.streams.state.KeyValueStore;
 

@@ -1,3 +1,5 @@
+package punctuator;
+
 import model.AkciyaStep;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.processor.ProcessorContext;

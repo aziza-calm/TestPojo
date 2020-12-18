@@ -1,3 +1,5 @@
+package transformers;
+
 import model.AkciyaStep;
 import model.PojoJson;
 import org.apache.kafka.streams.KeyValue;
