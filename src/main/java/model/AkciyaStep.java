@@ -21,15 +21,20 @@ public class AkciyaStep {
     @JsonProperty("antRur")
     private BigDecimal antRur;
 
+    @JsonProperty("merchant")
+    private String merchant;
+
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public AkciyaStep(@JsonProperty("clientPin") String clientPin,
                       @JsonProperty("stepId") int stepId,
                       @JsonProperty("eventDttm") String eventDttm,
-                      @JsonProperty("antRur") BigDecimal antRur) {
+                      @JsonProperty("antRur") BigDecimal antRur,
+                      @JsonProperty("merchant") String merchant) {
         this.clientPin = clientPin;
         this.stepId = stepId;
         this.eventDttm = eventDttm;
         this.antRur = antRur;
+        this.merchant = merchant;
     }
 
     public AkciyaStep(PojoJson pojoJson) {
@@ -37,10 +42,23 @@ public class AkciyaStep {
         this.stepId = 0;
         this.eventDttm = new Date(System.currentTimeMillis()).toString();
         this.antRur = pojoJson.getReqAmt();
+        this.merchant = pojoJson.getMerchant();
     }
 
     public int getStepId() {
         return stepId;
+    }
+
+    public String getMerchant() {
+        return merchant;
+    }
+
+    public void setMerchant(String merchant) {
+        this.merchant = merchant;
+    }
+
+    public void setAntRur(BigDecimal antRur) {
+        this.antRur = antRur;
     }
 
     public String getClientPin() {
@@ -66,6 +84,7 @@ public class AkciyaStep {
                 ", stepId=" + stepId +
                 ", eventDttm='" + eventDttm + '\'' +
                 ", antRur=" + antRur +
+                ", merchant='" + merchant + '\'' +
                 '}';
     }
 }

@@ -32,3 +32,13 @@
 {"clientPin":"cbcdef", "reqAmt":"20.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-09T14:48:23.000"}
 {"clientPin":"cbcdef", "reqAmt":"30.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-09T14:48:23.000"}
 {"clientPin":"cbcdef", "reqAmt":"3060.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-10T14:48:23.000"}
+
+## Testing ecommerce branch
+{"clientPin":"cbcdef", "reqAmt":"3060.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-10T14:48:23.000"}
+{"clientPin":"cbcdef", "reqAmt":"3060.0", "merchant":"E-Commerce", "uTime":"2020-12-10T14:48:23.000"}
+{"clientPin":"cbcdef", "reqAmt":"2010.0", "merchant":"E-Commerce", "uTime":"2020-12-10T14:48:23.000"}
+
+{"clientPin":"abcdef", "reqAmt":"3000.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
+{"clientPin":"abcdef", "reqAmt":"100.0", "merchant":"E-Commerce", "uTime":"2020-12-08T14:48:23.000"}
+{"clientPin":"abcdef", "reqAmt":"2000.0", "merchant":"Cafe&Restaurant", "uTime":"2020-12-08T14:48:23.000"}
+{"clientPin":"abcdef", "reqAmt":"5000.0", "merchant":"E-Commerce", "uTime":"2020-12-08T14:48:23.000"}

@@ -59,8 +59,8 @@ public class ProblemSixApp {
         filtByMerch[caferestr].transform(new CafeTransformerSupplier(), "akciya-steps")
                                 .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
 
-//        filtByMerch[supermarket].transform(new EcommerceTransformerSupplier(), "akciya-steps")
-//                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
+        filtByMerch[ecommerce].transform(new EcommerceTransformerSupplier(), "akciya-steps")
+                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), config);
         kafkaStreams.cleanUp();
