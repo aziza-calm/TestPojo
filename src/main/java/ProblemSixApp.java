@@ -3,6 +3,7 @@ import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
@@ -44,6 +45,7 @@ public class ProblemSixApp {
 //        делим на ветки, предварительно задав ключ
         KStream<String, PojoJson>[] filtByMerch =
                 filteredSource.selectKey((k, v) -> v.getClientPin())
+                        .through("op", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(PojoJson.class)))
                         .branch(isCafeRestr, isSupermarket, isECommerce);
 
         // create store
@@ -56,6 +58,9 @@ public class ProblemSixApp {
 
         filtByMerch[caferestr].transform(new CafeTransformerSupplier(), "akciya-steps")
                                 .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
+
+//        filtByMerch[supermarket].transform(new EcommerceTransformerSupplier(), "akciya-steps")
+//                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), config);
         kafkaStreams.cleanUp();

@@ -29,7 +29,7 @@ public class CafePunctuator implements Punctuator {
                 if (akciyaStep.getAntRur().compareTo(BigDecimal.valueOf(3000)) >= 0) {
                     akciyaStep.setStepId(1);
                     context.forward(key, akciyaStep);
-                    System.out.printf(String.format("Forwarded {} {}\n", key, akciyaStep.toString()));
+                    System.out.printf(String.format("Forwarded %s %s\n", key, akciyaStep.toString()));
                     store.delete(key);
                 }
             }

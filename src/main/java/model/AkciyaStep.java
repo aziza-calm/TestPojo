@@ -52,7 +52,7 @@ public class AkciyaStep {
     }
 
     public void updateAntRur(BigDecimal reqAmt) {
-        this.antRur = this.antRur.add(reqAmt);
+        antRur = antRur.add(reqAmt);
     }
 
     @Override
