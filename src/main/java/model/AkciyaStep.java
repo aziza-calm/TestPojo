@@ -39,6 +39,10 @@ public class AkciyaStep {
         this.antRur = pojoJson.getReqAmt();
     }
 
+    public int getStepId() {
+        return stepId;
+    }
+
     public String getClientPin() {
         return clientPin;
     }
