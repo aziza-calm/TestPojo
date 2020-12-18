@@ -5,7 +5,7 @@ import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 
-public class CafeTransformer implements Transformer<String, PojoJson, KeyValue<String, AkciyaStep>> {
+public class SupermarketTransformer implements Transformer<String, PojoJson, KeyValue<String, AkciyaStep>> {
     private KeyValueStore<String, AkciyaStep> state;
 
     @Override
@@ -16,11 +16,15 @@ public class CafeTransformer implements Transformer<String, PojoJson, KeyValue<S
     @Override
     public KeyValue transform(String key, PojoJson pojoJson) {
         AkciyaStep akciyaStep = state.get(key);
-        if (akciyaStep == null)
-            akciyaStep = new AkciyaStep(pojoJson);
-        else
-            akciyaStep.updateAntRur(pojoJson.getReqAmt());
-        akciyaStep = CheckState.checkState(key, akciyaStep, state);
+        if (akciyaStep != null) {
+            if (akciyaStep.getStepId() == 2 && akciyaStep.getMerchant().equals("E-Commerce")) {
+                akciyaStep.setMerchant("Supermarket");
+                akciyaStep.setAntRur(pojoJson.getReqAmt());
+            }
+            else if (akciyaStep.getStepId() == 2 && akciyaStep.getMerchant().equals("Supermarket"))
+                akciyaStep.updateAntRur(pojoJson.getReqAmt());
+            akciyaStep = CheckState.checkState(key, akciyaStep, state);
+        }
         if (akciyaStep == null) return null;
         return new KeyValue(key, akciyaStep);
     }

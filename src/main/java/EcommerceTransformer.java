@@ -5,7 +5,7 @@ import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 
-public class EcommerceTransformer implements Transformer<String, PojoJson, KeyValue> {
+public class EcommerceTransformer implements Transformer<String, PojoJson, KeyValue<String, AkciyaStep>> {
     private KeyValueStore<String, AkciyaStep> state;
 
     @Override

@@ -1,3 +1,4 @@
+import model.AkciyaSink;
 import model.AkciyaStep;
 import model.PojoJson;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -57,10 +58,15 @@ public class ProblemSixApp {
         builder.addStateStore(keyValueStoreBuilder);
 
         filtByMerch[caferestr].transform(new CafeTransformerSupplier(), "akciya-steps")
-                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
+                                .mapValues(AkciyaSink::new)
+                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaSink.class)));
 
         filtByMerch[ecommerce].transform(new EcommerceTransformerSupplier(), "akciya-steps")
-                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaStep.class)));
+                                .mapValues(AkciyaSink::new)
+                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaSink.class)));
+
+        filtByMerch[supermarket].transform(new SupermarketTransformerSupplier(), "akciya-steps").mapValues(AkciyaSink::new)
+                                .to("sink-topic", Produced.with(Serdes.String(), SerDeFactory.getPOJOSerde(AkciyaSink.class)));
 
         KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), config);
         kafkaStreams.cleanUp();

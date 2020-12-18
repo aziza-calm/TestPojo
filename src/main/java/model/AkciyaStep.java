@@ -49,6 +49,10 @@ public class AkciyaStep {
         return stepId;
     }
 
+    public String getEventDttm() {
+        return eventDttm;
+    }
+
     public String getMerchant() {
         return merchant;
     }

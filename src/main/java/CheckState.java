@@ -27,6 +27,15 @@ public class CheckState {
                 return akciyaStep;
             }
         }
+        if (akciyaStep.getMerchant().equals("Supermarket")) {
+            if (akciyaStep.getAntRur().compareTo(BigDecimal.valueOf(3000)) >= 0
+                    && akciyaStep.getStepId() == 2) {
+                akciyaStep.setStepId(3);
+                state.put(key, akciyaStep);
+                System.out.printf("Put %s : %s\n", key, akciyaStep.toString());
+                return akciyaStep;
+            }
+        }
         return null;
     }
 }
